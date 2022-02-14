@@ -902,9 +902,12 @@ def aks_get_credentials(cmd,    # pylint: disable=unused-argument
                             '~'), '.kube', 'config'),
                         overwrite_existing=False,
                         context_name=None,
-                        public_fqdn=False):
+                        public_fqdn=False,
+                        format=None):
     credentialResults = None
     serverType = None
+    if format:
+        format=format.lower()
     if public_fqdn:
         serverType = 'public'
     if admin:
@@ -913,7 +916,7 @@ def aks_get_credentials(cmd,    # pylint: disable=unused-argument
     else:
         if user.lower() == 'clusteruser':
             credentialResults = client.list_cluster_user_credentials(
-                resource_group_name, name, serverType)
+                resource_group_name, name, serverType, format)
         elif user.lower() == 'clustermonitoringuser':
             credentialResults = client.list_cluster_monitoring_user_credentials(
                 resource_group_name, name, serverType)

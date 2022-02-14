@@ -23,7 +23,8 @@ from ._validators import (
     validate_taints, validate_priority, validate_eviction_policy, validate_spot_max_price, validate_acr, validate_user,
     validate_load_balancer_outbound_ports, validate_load_balancer_idle_timeout, validate_nat_gateway_idle_timeout, validate_nodepool_tags, validate_addon,
     validate_nodepool_labels, validate_vnet_subnet_id, validate_pod_subnet_id, validate_max_surge, validate_assign_identity, validate_addons,
-    validate_pod_identity_pod_labels, validate_pod_identity_resource_name, validate_pod_identity_resource_namespace, validate_assign_kubelet_identity)
+    validate_pod_identity_pod_labels, validate_pod_identity_resource_name, validate_pod_identity_resource_namespace, validate_assign_kubelet_identity,
+    validate_credential_format)
 from ._consts import CONST_OUTBOUND_TYPE_LOAD_BALANCER, CONST_OUTBOUND_TYPE_USER_DEFINED_ROUTING, CONST_OUTBOUND_TYPE_MANAGED_NAT_GATEWAY, \
     CONST_OUTBOUND_TYPE_USER_ASSIGNED_NAT_GATEWAY, CONST_SCALE_SET_PRIORITY_REGULAR, CONST_SCALE_SET_PRIORITY_SPOT, \
     CONST_SPOT_EVICTION_POLICY_DELETE, CONST_SPOT_EVICTION_POLICY_DEALLOCATE, \
@@ -347,6 +348,7 @@ def load_arguments(self, _):
         c.argument('path', options_list=['--file', '-f'], type=file_type, completer=FilesCompleter(),
                    default=os.path.join(os.path.expanduser('~'), '.kube', 'config'))
         c.argument('public_fqdn', default=False, action='store_true')
+        c.argument('format', options_list=['--format'], validator=validate_credential_format)
 
     with self.argument_context('aks pod-identity') as c:
         c.argument('cluster_name', type=str, help='The cluster name.')

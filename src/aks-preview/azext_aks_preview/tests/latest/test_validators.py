@@ -289,5 +289,40 @@ class TestValidateKubernetesVersion(unittest.TestCase):
         self.assertEqual(str(cm.exception), err)
 
 
+class CredentialFormatNamespace:
+    def __init__(self, format, user):
+        self.format = format
+        self.user = user
+
+
+class TestCredentialFormat(unittest.TestCase):
+    def test_invalid_user(self):
+        invalid_user = "clusteradmin"
+        format = "exec"
+        namespace = CredentialFormatNamespace(format, invalid_user)
+        err = ("--format can only be specified when requesting clusterUser credential.")
+
+        with self.assertRaises(CLIError) as cm:
+            validators.validate_credential_format(namespace)
+        self.assertEqual(str(cm.exception), err)
+
+    def test_invalid_format(self):
+        user = "clusteruser"
+        format = "foobar"
+        namespace = CredentialFormatNamespace(format, invalid_user)
+        err = ("--format can only be azure or exec.")
+
+        with self.assertRaises(CLIError) as cm:
+            validators.validate_credential_format(namespace)
+        self.assertEqual(str(cm.exception), err)
+
+    def test_valid_format(self):
+        user = "clusteruser"
+        format = "exec"
+        namespace = CredentialFormatNamespace(format, invalid_user)
+
+        validators.validate_credential_format(namespace)
+
+
 if __name__ == "__main__":
     unittest.main()
