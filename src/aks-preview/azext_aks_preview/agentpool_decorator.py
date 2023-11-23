@@ -386,7 +386,7 @@ class AKSPreviewAgentPoolContext(AKSAgentPoolContext):
             ):
                 enable_artifact_streaming = self.agentpool.artifact_streaming_profile.enabled
         return enable_artifact_streaming
-    
+
     def get_ssh_access(self) -> Union[str, None]:
         """Obtain the value of ssh_access.
         """
@@ -567,7 +567,7 @@ class AKSPreviewAgentPoolAddDecorator(AKSAgentPoolAddDecorator):
                 agentpool.artifact_streaming_profile = self.models.AgentPoolArtifactStreamingProfile()
             agentpool.artifact_streaming_profile.enabled = True
         return agentpool
-    
+
     def set_up_ssh_access(self, agentpool: AgentPool) -> AgentPool:
         self._ensure_agentpool(agentpool)
 
@@ -726,9 +726,9 @@ class AKSPreviewAgentPoolUpdateDecorator(AKSAgentPoolUpdateDecorator):
                 return agentpool
 
             msg = (
-                    "You're going to update agentpool {} ssh access to '{}' "
-                    "This change will take effect after you upgrade the nodepool. Proceed?".format(agentpool.name, ssh_access)
-                )
+                "You're going to update agentpool {} ssh access to '{}' "
+                "This change will take effect after you upgrade the nodepool. Proceed?".format(agentpool.name, ssh_access)
+            )
             if not self.context.get_yes() and not prompt_y_n(msg, default="n"):
                 raise DecoratorEarlyExitException()
             agentpool.security_profile.ssh_access = ssh_access
