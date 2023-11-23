@@ -104,6 +104,8 @@ from azext_aks_preview._consts import (
     CONST_WORKLOAD_RUNTIME_WASM_WASI,
     CONST_NODE_PROVISIONING_MODE_MANUAL,
     CONST_NODE_PROVISIONING_MODE_AUTO,
+    CONST_SSH_ACCESS_DISABLED,
+    CONST_SSH_ACCESS_LOCALUSER,
 )
 from azext_aks_preview._validators import (
     validate_acr,
@@ -165,7 +167,8 @@ from azext_aks_preview._validators import (
     validate_vnet_subnet_id,
     validate_force_upgrade_disable_and_enable_parameters,
     validate_azure_service_mesh_revision,
-    validate_artifact_streaming
+    validate_artifact_streaming,
+    validate_ssh_access,
 )
 from azure.cli.core.commands.parameters import (
     edge_zone_type,
@@ -518,6 +521,8 @@ def load_arguments(self, _):
                    help='set ephemeral disk storage pool option for azure container storage')
         c.argument('node_provisioning_mode', is_preview=True, arg_type=get_enum_type(node_provisioning_modes),
                    help='Set the node provisioning mode of the cluster. Valid values are "Auto" and "Manual". For more information on "Auto" mode see aka.ms/aks/nap.')
+        # in creation scenario, use "localuser" as default
+        c.argument('ssh_access', type=str, default=CONST_SSH_ACCESS_LOCALUSER, is_preview=True, validator=validate_ssh_access)
 
     with self.argument_context('aks update') as c:
         # managed cluster paramerters
@@ -664,6 +669,8 @@ def load_arguments(self, _):
                    help='define the comma separated nodepool list to install azure container storage')
         c.argument('node_provisioning_mode', is_preview=True, arg_type=get_enum_type(node_provisioning_modes),
                    help='Set the node provisioning mode of the cluster. Valid values are "Auto" and "Manual". For more information on "Auto" mode see aka.ms/aks/nap.')
+        # In update scenario, use emtpy str as default.
+        c.argument('ssh_access', type=str, is_preview=True, validator=validate_ssh_access)
 
     with self.argument_context('aks upgrade') as c:
         c.argument('kubernetes_version', completer=get_k8s_upgrades_completion_list)
@@ -731,6 +738,8 @@ def load_arguments(self, _):
         c.argument('enable_artifact_streaming', action='store_true', validator=validate_artifact_streaming, is_preview=True)
         c.argument('node_public_ip_tags', arg_type=tags_type, validator=validate_node_public_ip_tags,
                    help='space-separated tags: key[=value] [key[=value] ...].')
+        # in creation scenario, use "localuser" as default
+        c.argument('ssh_access', type=str, default=CONST_SSH_ACCESS_LOCALUSER, is_preview=True, validator=validate_ssh_access)
 
     with self.argument_context('aks nodepool update') as c:
         c.argument('enable_cluster_autoscaler', options_list=[
@@ -756,6 +765,9 @@ def load_arguments(self, _):
         c.argument('asg_ids', validator=validate_application_security_groups, is_preview=True)
         c.argument('enable_artifact_streaming', action='store_true', validator=validate_artifact_streaming, is_preview=True)
         c.argument('os_sku', arg_type=get_enum_type(node_os_skus_update), validator=validate_os_sku)
+        # In update scenario, use emtpy str as default.
+        c.argument('ssh_access', type=str, is_preview=True, validator=validate_ssh_access)
+        c.argument('yes', options_list=['--yes', '-y'], help='Do not prompt for confirmation.', action='store_true')
 
     with self.argument_context('aks nodepool upgrade') as c:
         c.argument('max_surge', validator=validate_max_surge)

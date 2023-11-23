@@ -582,6 +582,9 @@ helps['aks create'] = """
         - name: --enable-app-routing
           type: bool
           short-summary: Enable Application Routing addon.
+        - name: --ssh-access
+          type: string
+          short-summary: Configure SSH setting for all node pools in this cluster. Allowed values are ["disabled", "localuser"]. Use "disabled" to disable SSH access, "localuser" to enable SSH access using private key. Default value is "localuser".
     examples:
         - name: Create a Kubernetes cluster with an existing SSH public key.
           text: az aks create -g MyResourceGroup -n MyManagedCluster --ssh-key-value /path/to/publickey
@@ -1109,6 +1112,9 @@ helps['aks update'] = """
         - name: --node-provisioning-mode
           type: string
           short-summary: Set the node provisioning mode of the cluster. Valid values are "Auto" and "Manual". For more information on "Auto" mode see aka.ms/aks/nap.
+        - name: --ssh-access
+          type: string
+          short-summary: Update SSH setting for all node pools in this cluster. Allowed values are ["disabled", "localuser"]. Use "disabled" to disable SSH access, "localuser" to enable SSH access using private key. Default value is "localuser".
     examples:
       - name: Reconcile the cluster back to its current state.
         text: az aks update -g MyResourceGroup -n MyManagedCluster
@@ -1680,6 +1686,9 @@ helps['aks nodepool add'] = """
         - name: --enable-artifact-streaming
           type: bool
           short-summary: Enable artifact streaming for VirtualMachineScaleSets managed by a node pool, to speed up the cold-start of containers on a node through on-demand image loading. To use this feature, container images must also enable artifact streaming on ACR. If not specified, the default is false.
+        - name: --ssh-access
+          type: string
+          short-summary: Configure SSH setting for the node pool. Allowed values are ["disabled", "localuser"]. Use "disabled" to disable SSH access, "localuser" to enable SSH access using private key. Default value is "localuser".
     examples:
         - name: Create a nodepool in an existing AKS cluster with ephemeral os enabled.
           text: az aks nodepool add -g MyResourceGroup -n nodepool1 --cluster-name MyManagedCluster --node-osdisk-type Ephemeral --node-osdisk-size 48
@@ -1798,6 +1807,9 @@ helps['aks nodepool update'] = """
         - name: --os-sku
           type: string
           short-summary: The os-sku of the agent node pool.
+        - name: --ssh-access
+          type: string
+          short-summary: Update SSH setting for the node pool. Allowed values are ["disabled", "localuser"]. Use "disabled" to disable SSH access, "localuser" to enable SSH access using private key. Default value is "localuser".
     examples:
       - name: Reconcile the nodepool back to its current state.
         text: az aks nodepool update -g MyResourceGroup -n nodepool1 --cluster-name MyManagedCluster
