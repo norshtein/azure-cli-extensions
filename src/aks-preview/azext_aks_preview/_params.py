@@ -522,7 +522,7 @@ def load_arguments(self, _):
         c.argument('node_provisioning_mode', is_preview=True, arg_type=get_enum_type(node_provisioning_modes),
                    help='Set the node provisioning mode of the cluster. Valid values are "Auto" and "Manual". For more information on "Auto" mode see aka.ms/aks/nap.')
         # in creation scenario, use "localuser" as default
-        c.argument('ssh_access', type=str, default=CONST_SSH_ACCESS_LOCALUSER, is_preview=True, validator=validate_ssh_access)
+        c.argument('ssh_access', default=CONST_SSH_ACCESS_LOCALUSER, is_preview=True, validator=validate_ssh_access)
 
     with self.argument_context('aks update') as c:
         # managed cluster paramerters
@@ -670,7 +670,7 @@ def load_arguments(self, _):
         c.argument('node_provisioning_mode', is_preview=True, arg_type=get_enum_type(node_provisioning_modes),
                    help='Set the node provisioning mode of the cluster. Valid values are "Auto" and "Manual". For more information on "Auto" mode see aka.ms/aks/nap.')
         # In update scenario, use emtpy str as default.
-        c.argument('ssh_access', type=str, is_preview=True, validator=validate_ssh_access)
+        c.argument('ssh_access', is_preview=True, validator=validate_ssh_access)
 
     with self.argument_context('aks upgrade') as c:
         c.argument('kubernetes_version', completer=get_k8s_upgrades_completion_list)
@@ -739,7 +739,7 @@ def load_arguments(self, _):
         c.argument('node_public_ip_tags', arg_type=tags_type, validator=validate_node_public_ip_tags,
                    help='space-separated tags: key[=value] [key[=value] ...].')
         # in creation scenario, use "localuser" as default
-        c.argument('ssh_access', type=str, default=CONST_SSH_ACCESS_LOCALUSER, is_preview=True, validator=validate_ssh_access)
+        c.argument('ssh_access', default=CONST_SSH_ACCESS_LOCALUSER, is_preview=True, validator=validate_ssh_access)
 
     with self.argument_context('aks nodepool update') as c:
         c.argument('enable_cluster_autoscaler', options_list=[
@@ -766,7 +766,7 @@ def load_arguments(self, _):
         c.argument('enable_artifact_streaming', action='store_true', validator=validate_artifact_streaming, is_preview=True)
         c.argument('os_sku', arg_type=get_enum_type(node_os_skus_update), validator=validate_os_sku)
         # In update scenario, use emtpy str as default.
-        c.argument('ssh_access', type=str, is_preview=True, validator=validate_ssh_access)
+        c.argument('ssh_access', is_preview=True, validator=validate_ssh_access)
         c.argument('yes', options_list=['--yes', '-y'], help='Do not prompt for confirmation.', action='store_true')
 
     with self.argument_context('aks nodepool upgrade') as c:
